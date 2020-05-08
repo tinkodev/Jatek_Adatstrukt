@@ -6,7 +6,9 @@
 int main()
 {
    Asciszamok();
-   CreateField();
+   SnakeInitialization();
+    CreateField();
+
 
 
     return 0;
