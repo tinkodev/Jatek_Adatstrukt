@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "snake.h"
+
 
 int main()
 {
-    printf("Hello world!\n");
+   Asciszamok();
+   CreateField();
+
+
     return 0;
 }

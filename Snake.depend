@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1588937798 source:c:\users\tinkd\desktop\kripto\snake\jatek_adatstrukt\snake.c
+	"snake.h"
+	<stdio.h>
+	<stdlib.h>
+
+1588936806 c:\users\tinkd\desktop\kripto\snake\jatek_adatstrukt\snake.h
+
+1588936868 source:c:\users\tinkd\desktop\kripto\snake\jatek_adatstrukt\main.c
+	<stdio.h>
+	<stdlib.h>
+	"snake.h"
+

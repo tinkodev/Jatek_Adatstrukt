@@ -3,5 +3,8 @@
 
 
 
+void Asciszamok();
+void CreateField();
+
 
 #endif // SNAKE_H_INCLUDED
