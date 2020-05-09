@@ -7,6 +7,11 @@ void Asciszamok();
 void CreateField();
 void SnakeInitialization();
 void ResetScreenPosition();
+void GameLoop();
+void Random();
+void Movement();
+int Keyboard_hit();
+void TailRemove();
 
 
 #endif // SNAKE_H_INCLUDED

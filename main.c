@@ -5,9 +5,8 @@
 
 int main()
 {
-   Asciszamok();
    SnakeInitialization();
-    CreateField();
+   GameLoop();
 
 
 
