@@ -12,6 +12,7 @@ void Random();
 void Movement();
 int Keyboard_hit();
 void TailRemove();
+void Gameover();
 
 
 #endif // SNAKE_H_INCLUDED

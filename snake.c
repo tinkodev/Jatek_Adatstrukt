@@ -4,12 +4,58 @@
 #include <windows.h>
 #include <conio.h>
 #include <time.h>
+#include <string.h>
 
 #define N 20
 #define M 40
 
-int i,j,Field[N][M],x,y,Gy,Head,Tail,Game,Frogs,a,b,var,dir;
+int i,j,Field[N][M],x,y,Gy,Head,Tail,Game,Frogs,a,b,var,dir,Score,HighScore,Speed,Level;
+char Name[20];
 
+
+FILE *f;
+
+
+
+void Gameover(){//Játék vége :D
+printf("\a");
+Sleep(1500);
+system("Cls");
+if(Score>HighScore){
+    printf("Uj rekord gratulalok %d!!!!!!!!\n\n",Score);
+    //printf("Ki dontott rekordot kerem a nevet?\n");
+    //scanf("%s",Name);
+    system("pause");
+    f=fopen("highscore.txt","w");
+           //fprintf(f,"%s:",Name);
+    fprintf(f,"%d",Score);
+    fclose(f);
+
+}
+system("Cls");
+printf("\n\n                          GAME OVER !!!!!!!");
+printf("                              Pontszam: %d \n\n",Score);
+Game = 1;
+if(Score == 25 || Score > 45){
+printf("                          Szint 1 teljesitve!\n\n");
+}
+printf("Nyomjon ENTER-t az uj jatekhoz vagy ESC-et hogy kilepjen!");
+}
+
+void TailRemove()
+{
+    for(i=0; i<N; i++)
+    {
+        for(j=0; j<M; j++)
+        {
+            if(Field[i][j]==Tail)
+            {
+                Field[i][j]=0;
+            }
+        }
+    }
+    Tail++;
+}
 int Keyboard_hit(){
 if(_kbhit())
     return getch();
@@ -24,21 +70,49 @@ if(((var == 'd' || var == 'a')  || (var == 'w' || var  == 's'))//mivel hogy mind
 &&abs(dir-var)>5) dir = var;
 if(dir == 'd'){
     y++;
+    if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();//lekezem hogya saját magának megy akkor legyen vége a játéknak
+    if(y==M-1) y=0;//ha belemegy a falbaa kigyó másik felől ugyanúgy jelenjen meg
     Head++;
+    if(Field[x][y]==-1){
+        Frogs=0;
+        Score+=5;
+        Tail-=2;
+    }
     Field[x][y] = Head;
 }
 if(dir == 'w'){
     x--;
+    if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
+    if(x==-1) x = N-1;
+    if(Field[x][y]==-1){
+        Frogs=0;
+        Score+=5;
+           Tail-=2;
+    }
     Head++;
     Field[x][y] = Head;
 }
 if(dir == 'a'){
     y--;
+    if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
+    if(y==0) y = M-1;
+    if(Field[x][y]==-1){
+        Frogs=0;
+        Score+=5;
+           Tail-=2;
+    }
     Head++;
     Field[x][y] = Head;
 }
 if(dir == 's'){
     x++;
+    if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
+    if(x==N-1) x = 0;
+    if(Field[x][y]==-1){
+        Frogs=0;
+        Score+=5;
+           Tail-=2;
+    }
     Head++;
     Field[x][y] = Head;
 }
@@ -49,7 +123,7 @@ void Random(){
     a = 1 + rand() % 18;//random pozíciot generálok a Békának persze N és M között
     b = 1 + rand() % 38;//
 
-    if(Frogs == 0 && Field[a][b]==0){//megnézem hogy vane már értéke a békának és hogy ürese a pálya
+    if(Frogs == 0 && Field[a][b]==0){//megnézem hogy vane már értéke a békának és hogy ürese a pálya ha nincsen akkor Random egyet berakok a Fieldbe
      Field[a][b] = -1;
      Frogs = 1;
     }
@@ -63,6 +137,7 @@ void GameLoop()
         ResetScreenPosition();
         Random();
         Movement();
+        TailRemove();
         Sleep(99);
     }
 }
@@ -79,6 +154,9 @@ void ResetScreenPosition()
 
 void SnakeInitialization()
 {
+        f=fopen("highscore.txt","r");//Azért olvasom be hogy Game overnél legyen amivel összehasonlítja
+        fscanf(f,"%d",&HighScore);
+        fclose(f);
 //csináltam egy egy NxM-es üres tömböt ahhoz inicializálni tudjam a kígyómat
     for(i=0; i<N; i++)
     {
@@ -121,6 +199,8 @@ void CreateField()
             printf("%c",205);
         }
     }
+    printf("Szint: 1");
+    printf(" Jelenlegi pontszam: %d Rekord pontszam: %d",Score,HighScore);
     printf("\n");
     for(i=0; i<N; i++)
     {

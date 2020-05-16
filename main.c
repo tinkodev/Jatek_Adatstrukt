@@ -5,10 +5,8 @@
 
 int main()
 {
+
    SnakeInitialization();
    GameLoop();
-
-
-
     return 0;
 }
