@@ -9,8 +9,8 @@
 #define N 20
 #define M 40
 
-int i,j,Field[N][M],x,y,Gy,Head,Tail,Game,Frogs,a,b,var,dir,Score,HighScore,Speed,Level;
-char Name[20];
+int i,j,Field[N][M],x,y,Gy,Head,Tail,Game,Frogs,a,b,var,dir,Score,HighScore,Speed,Level=1;
+
 
 
 FILE *f;
@@ -23,25 +23,49 @@ Sleep(1500);
 system("Cls");
 if(Score>HighScore){
     printf("Uj rekord gratulalok %d!!!!!!!!\n\n",Score);
-    //printf("Ki dontott rekordot kerem a nevet?\n");
-    //scanf("%s",Name);
     system("pause");
     f=fopen("highscore.txt","w");
-           //fprintf(f,"%s:",Name);
     fprintf(f,"%d",Score);
     fclose(f);
 
 }
 system("Cls");
 printf("\n\n                          GAME OVER !!!!!!!");
-printf("                              Pontszam: %d \n\n",Score);
-Game = 1;
-if(Score == 25 || Score > 45){
-printf("                          Szint 1 teljesitve!\n\n");
+printf("                                         Pontszam: %d \n\n",Score);
+if(Score >= 5){
+printf("                                                       Szint 1 teljesitve!\n\n");
 }
-printf("Nyomjon ENTER-t az uj jatekhoz vagy ESC-et hogy kilepjen!");
+if(Score >= 20){
+printf("                                                       Szint 2 teljesitve!\n\n");
 }
+if(Score >= 35){
+printf("                                                       Szint 3 teljesitve!\n\n");
+}
+if(Score >= 50){
+printf("                                                       Szint 5 teljesitve!\n\n");
+}
+if(Score >= 65){
+printf("                                                       Szint 6 teljesitve!\n\n");
+}
+printf("                                 Nyomjon ENTER-t az uj jatekhoz vagy ESC-et hogy kilepjen!\n\n");
 
+    while(1)
+    {
+        var = Keyboard_hit();
+        if(var == 13)
+        {
+            Game = 0;
+            SnakeInitialization();
+            break;
+        }
+        else if(var == 27)
+        {
+            Game =1;
+            break;
+        }
+    }
+    system("cls");
+}
 void TailRemove()
 {
     for(i=0; i<N; i++)
@@ -64,26 +88,40 @@ if(_kbhit())
 }
 
 void Movement(){
+    if(Score == 5)
+       Level = 2;
+       if(Score==20){
+        Level=3;
+       }
+       if(Score == 35){
+        Level=4;
+       }
+       if(Score == 50){
+        Level = 5;
+       }
+       if(Score == 65){
+        Level = 5;
+       }
 var = Keyboard_hit();
-var = tolower(var);//nem számít a caps lock aktiválva van vagy nincs ugyis kisbetüsítek
-if(((var == 'd' || var == 'a')  || (var == 'w' || var  == 's'))//mivel hogy mindegyik feltétel tljesűl ezért folyamatosan mozog csak írányt kell váltanom
-&&abs(dir-var)>5) dir = var;
+var = tolower(var);//nem számít ha a caps lock aktiválva van vagy nincs ugyis kisbetüsítek
+if(((var == 'd' || var == 'a')  || (var == 'w' || var  == 's'))//mivel hogy mindegyik feltétel teljesűl ezért folyamatosan mozog csak írányt kell váltanom
+&&abs(dir-var)>5) dir = var; // nem megy vissza saját magán
 if(dir == 'd'){
     y++;
     if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();//lekezem hogya saját magának megy akkor legyen vége a játéknak
     if(y==M-1) y=0;//ha belemegy a falbaa kigyó másik felől ugyanúgy jelenjen meg
-    Head++;
     if(Field[x][y]==-1){
         Frogs=0;
         Score+=5;
         Tail-=2;
     }
+    Head++;
     Field[x][y] = Head;
 }
 if(dir == 'w'){
     x--;
     if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
-    if(x==-1) x = N-1;
+    if(x==-1) x = N-1;//ha belemegy a falbas kigyó másik felől ugyanúgy jelenjen meg
     if(Field[x][y]==-1){
         Frogs=0;
         Score+=5;
@@ -95,7 +133,7 @@ if(dir == 'w'){
 if(dir == 'a'){
     y--;
     if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
-    if(y==0) y = M-1;
+    if(y==0) y = M-1;//ha belemegy a falbaa kigyó másik felől ugyanúgy jelenjen meg
     if(Field[x][y]==-1){
         Frogs=0;
         Score+=5;
@@ -107,7 +145,7 @@ if(dir == 'a'){
 if(dir == 's'){
     x++;
     if(Field[x][y]!=0 && Field[x][y]!=-1) Gameover();
-    if(x==N-1) x = 0;
+    if(x==N-1) x = 0;//ha belemegy a falbaa kigyó másik felől ugyanúgy jelenjen meg
     if(Field[x][y]==-1){
         Frogs=0;
         Score+=5;
@@ -118,13 +156,13 @@ if(dir == 's'){
 }
 }
 
-void Random(){
+void Froginitialization(){
     srand(time(0));
     a = 1 + rand() % 18;//random pozíciot generálok a Békának persze N és M között
     b = 1 + rand() % 38;//
 
     if(Frogs == 0 && Field[a][b]==0){//megnézem hogy vane már értéke a békának és hogy ürese a pálya ha nincsen akkor Random egyet berakok a Fieldbe
-     Field[a][b] = -1;
+     Field[a][b] = -1;//Ha megette rakjon be újjat
      Frogs = 1;
     }
 }
@@ -135,7 +173,7 @@ void GameLoop()
     {
         CreateField();
         ResetScreenPosition();
-        Random();
+        Froginitialization();
         Movement();
         TailRemove();
         Sleep(99);
@@ -172,7 +210,7 @@ void SnakeInitialization()
     Tail = 1;
     Game = 0;
     Frogs = 0;
-    dir = 'd';
+    dir = 'd';// Merre indul kezdetben
     for(i=0; i<Head; i++)
     {
         Gy++;
@@ -199,8 +237,8 @@ void CreateField()
             printf("%c",205);
         }
     }
-    printf("Szint: 1");
-    printf(" Jelenlegi pontszam: %d Rekord pontszam: %d",Score,HighScore);
+    printf("Szint: %d | ",Level);
+    printf(" Jelenlegi pontszam: %d | Rekord pontszam: %d",Score,HighScore);
     printf("\n");
     for(i=0; i<N; i++)
     {
@@ -211,7 +249,7 @@ void CreateField()
             if(Field[i][j]==0)printf(" ");
             if(Field[i][j]>0 && Field[i][j]!=Head)printf("%c",176);
             if(Field[i][j]==Head)printf("%c",178);
-            if(Field[i][j]==-1)printf("%c",15);
+            if(Field[i][j]==-1)printf("%c",15);//a Beka :D
             if(j==M-1)
             {
                 printf("%c\n",186);// ez pedig a függőleges része ezt egészen M-1 fogja írni
