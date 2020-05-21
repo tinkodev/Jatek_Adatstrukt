@@ -14,3 +14,4 @@ void TailRemove();
 void LevelPass();
 void Gameover();
 void Print();
+Játékom során a Játékos mozgatja a  kígyót  az eszik növekedik,  a játéknak akkor van vége ha a  kigyó saját magának nekimegy.
